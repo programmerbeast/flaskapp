@@ -1,6 +1,5 @@
 import whisper
 import openai
-import os
 import tiktoken
 openai.api_key = "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"
 

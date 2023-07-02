@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from main import driver, talk_to_GPT
-import mimetypes
 import os 
 
 app = Flask(__name__, static_url_path='/static')
@@ -11,9 +10,6 @@ output_path="static/video"
 history=""
 UPLOAD_FOLDER = output_path
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-mimetypes.add_type('video/mp4', '.mp4')
-mimetypes.add_type('video/ogg', '.ogg')
 
 
 #result=driver(file_path,output_path)
