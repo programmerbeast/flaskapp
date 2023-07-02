@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Chat with your video or audio file, Upload your .mp4 or .mp3 file or put in a youtube url</title>
+    <style>
+        /* CSS styles for the chat container */
+        
+    
+
+        #myVideo {
+            display: block;
+        }
+
+        #myAudio {
+            display: block;
+        }
+        .lol{
+            display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  text-align: center;
+        }
+        .chat-container {
+            width: 600px;
+            height: 550px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+        }
+
+        /* CSS styles for chat messages */
+        .chat-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+
+        /* CSS styles for user messages */
+        .user-message {
+            text-align: right;
+        }
+
+        .user_input{
+            width: 800px;
+  height: 30px;
+  font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="lol">
+        
+          <audio id="myAudio" controls>
+            <source src="{{ url_for('static',filename='video/' + path)}}" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+
+
+
+    <div class="chat-container">
+        <div class="chat-message">Hello! How can I assist you today?</div>
+    </div>
+
+    <input type="text" id="user-input" placeholder="Type your message..."  class=user_input autofocus>
+    </div>
+    <script>
+        // JavaScript code to handle user input and generate chatbot responses
+        const chatContainer = document.querySelector('.chat-container');
+        const userInput = document.getElementById('user-input');
+
+        function addUserMessage(message) {
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user-message';
+            userMessage.textContent = message;
+            
+            userMessage.style.backgroundColor = '#e6f7ff';
+            chatContainer.appendChild(userMessage);
+        }
+
+        function addChatbotMessage(message) {
+            const chatbotMessage = document.createElement('div');
+            chatbotMessage.className = 'chat-message';
+            chatbotMessage.textContent = message;
+            chatbotMessage.style.backgroundColor = '#AAFF00';
+            chatContainer.appendChild(chatbotMessage);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function handleUserInput() {
+    const message = userInput.value;
+    addUserMessage(message);
+
+    try {
+        // Send the user message to the server for processing
+        const response = await getChatbotResponse(message);
+
+        addChatbotMessage(response);
+
+        // Clear the user input field
+        userInput.value = '';
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+        function getChatbotResponse(userMessage) {
+    // Make an AJAX request to the Flask route
+    return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/get_chatbot_response', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText).response;
+                resolve(response);
+            } else {
+                reject(Error(xhr.statusText));
+            }
+        };
+        xhr.onerror = function() {
+            reject(Error('Network Error'));
+        };
+        xhr.send('user_message=' + encodeURIComponent(userMessage));
+    });
+}
+
+        userInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+
+        var playAudio = true; // Change this variable to true or false based on your requirement
+
+        var video = document.getElementById("myVideo");
+        var audio = document.getElementById("myAudio");
+
+        if (playAudio) {
+            // Audio is selected, hide the video
+            video.style.display = "none";
+        } else {
+            // Video is selected, hide the audio
+            audio.style.display = "none";
+        }
+    </script>
+</body>
+</html>

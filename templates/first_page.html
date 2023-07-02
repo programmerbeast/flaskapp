@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChatGPT Chat with your audio file, Upload your .mp4 or .mp3 file or put in a youtube url</title>
+    <style>
+        /* CSS styles for the chat container */
+        body {
+      background-color: lightblue;
+    }
+
+        .lol{
+            display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  text-align: center;
+        }
+        .radio_btn{
+            width: 15px;
+            height: 15px;
+        }
+        label{
+            width:90px;
+            height:90px;
+        }
+        input{
+            width:300px;
+            height:30px;
+        }
+        button {
+  color: #fff;
+  padding: 15px 25px;
+  background-color: #38D2D2;
+  background-image: radial-gradient(93% 87% at 87% 89%, rgba(0, 0, 0, 0.23) 0%, transparent 86.18%), radial-gradient(66% 66% at 26% 20%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: inset -3px -3px 9px rgba(255, 255, 255, 0.25), inset 0px 3px 9px rgba(255, 255, 255, 0.3), inset 0px 1px 1px rgba(255, 255, 255, 0.6), inset 0px -8px 36px rgba(0, 0, 0, 0.3), inset 0px 1px 5px rgba(255, 255, 255, 0.6), 2px 19px 31px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 16px;
+ 
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  cursor: pointer;
+}
+        
+        
+    </style>
+</head>
+<body>
+    
+    <div class="lol">
+        <h1>Chat with your audio!</h1>
+        <h2>We are still in the beta, for now upload files that are less then 12 minutes for best performance</h2>
+    <form id="crawlForm" method="POST" action="/input_docs" enctype="multipart/form-data">
+        <br>
+        <input type="radio" name="crawlOption" value="audio" id="audioOption" class="radio_btn" onclick="toggleInputFields('audio')"> 
+        <label for="audioOption">Select mp3 file</label>
+        <input type="file" name="audioFile" id="audioFile" style="display: none;">
+        <br>
+        <input type="radio" name="crawlOption" value="video" id="videoOption" class="radio_btn" onclick="toggleInputFields('video')"> 
+        <label for="videoOption">Select mp4 file</label>
+        <input type="file" name="videoFile" id="videoFile" style="display: none;" >
+        <br>
+        <input type="radio" name="crawlOption" value="youtube" id="youtubeOption" class="radio_btn" onclick="toggleInputFields('youtube')"> 
+        <label for="youtubeOption">Download from YouTube</label>
+        <input type="text" name="youtubeURL" id="youtubeURL" placeholder="Paste youtube url" style="display: none;">
+        <br>
+        <button onclick="submit_form()">Upload</button>
+    </form>
+            <p id="waitMessage" style="display: none;">Thank you for using the app, please wait a couple of minutes until the file is analyzed,
+                <br> note: this can take longer depending on the length od the input file</p>
+
+    </div>
+    
+    <script>
+        function toggleInputFields(mediaType) {
+            var audioInput = document.getElementById('audioFile');
+            var videoInput = document.getElementById('videoFile');
+            var youtubeInput = document.getElementById('youtubeURL');
+    
+            if (mediaType === 'audio') {
+                audioInput.style.display = 'block';
+                videoInput.style.display = 'none';
+                youtubeInput.style.display = 'none';
+            } else if (mediaType === 'video') {
+                audioInput.style.display = 'none';
+                videoInput.style.display = 'block';
+                youtubeInput.style.display = 'none';
+            } else if (mediaType === 'youtube') {
+                audioInput.style.display = 'none';
+                videoInput.style.display = 'none';
+                youtubeInput.style.display = 'block';
+            }
+        }
+        function submit_form(){
+
+            document.getElementById('crawlForm').submit();
+            var wait_msg = document.getElementById('waitMessage');
+            wait_msg.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
